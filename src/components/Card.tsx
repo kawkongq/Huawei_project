@@ -1,9 +1,11 @@
 import styles from './card.module.css'
 import Image from 'next/image';
 
-export default function Productcard() {
+export default function Productcard({ name }: { name: string }) {
     return (
         <div className={styles.card}>
+            <h1 className='text-3xl text-black text-center font-bold sticky top-0'>{name}</h1>
+            <div className={styles.scrollable}>
             <div className={styles.seconddiv}>
                 <div className={styles.ribbon}>TOP 1</div>
                 <div className={styles.imageWrapper}>
@@ -72,6 +74,7 @@ export default function Productcard() {
                     
                 </div>
             </div>
+        </div>
         
         
             {/* <div style={{width: "100%",

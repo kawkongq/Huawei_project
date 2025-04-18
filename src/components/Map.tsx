@@ -13,7 +13,6 @@ const Map: React.FC = () => {
         console.log(`Clicked on province: ${provinceName}`);
         // Add your logic to connect to another component here
         setSelectedProvince(provinceName);
-        
     };
     const MAP_WIDTH = 60;
     const [position, setPosition] = React.useState<{ coordinates: [number, number]; zoom: number }>({ coordinates: [100.9925, 15.8700], zoom: 1 });
@@ -64,20 +63,7 @@ const Map: React.FC = () => {
                 </ZoomableGroup>
             </ComposableMap>
             {selectedProvince && (
-        <div style={{
-            width: "30%",
-            height: "95%",
-            padding: "0.5rem",
-            background: "#fff",
-            color: "#fff",
-            borderRadius: "15px",
-            margin: "1rem",
-
-          }}>
-          <h1 style={{textAlign: 'center',fontSize: '45px',color: 'black'}}>{selectedProvince}</h1>
-          
-          <Productcard/>
-        </div>
+                <Productcard name={selectedProvince}/>
     )}
         </div>
        
