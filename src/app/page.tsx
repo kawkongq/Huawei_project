@@ -1,19 +1,15 @@
-'use client'
+"use client";
+import React, { useState } from "react";
+import Map from "@/components/Map";
+import SearchBar from "@/components/search_bar";
 
-import Image from 'next/image'
-import styles from './page.module.css'
-import Banner from '@/components/Banner'
-import Productcard from '@/components/Card'
-import Map from '@/components/Map'
+export default function Page() {
+    const [province, setProvince] = useState<string | undefined>("");
 
-export default function Home() {
-  return (
-    <main>
-      {/* <Banner/> */}
-      <Map/>
-      {/* <div style={{margin:"20px"}}>
-      <Productcard/>
-      </div> */}
-    </main>
-  )
+    return (
+        <div>
+            <SearchBar onSearch={(p) => setProvince(p)} />
+            <Map searchedProvince={province} />
+        </div>
+    );
 }
