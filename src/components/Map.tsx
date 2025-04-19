@@ -11,7 +11,7 @@ interface MapProps {
 const Map: React.FC<MapProps> = ({ searchedProvince }) => {
     const [selectedProvince, setSelectedProvince] = useState<string>("");
     const [highlightedProvince, setHighlightedProvince] = useState<string>(""); // ✅ province ที่จะถูกเน้นสี
-    const [geos, setGeos] = useState<any[]>([]);
+    const geographiesRef = useRef<any[]>([])
     const [position, setPosition] = useState<{ coordinates: [number, number]; zoom: number }>({
         coordinates: [100.9925, 15.8700],
         zoom: 1,
@@ -22,20 +22,29 @@ const Map: React.FC<MapProps> = ({ searchedProvince }) => {
         setPosition(pos);
     };
 
-    const handleProvinceClick = (provinceName: string) => {
-        setSelectedProvince(provinceName);
-        setHighlightedProvince(provinceName); // ✅ ให้จังหวัดที่คลิกถูกเน้นสีด้วย
-    };
+    const handleProvinceClick = (provinceName: string, el: SVGElement) => {
+     
+        if (lastClicked.current) {
+          lastClicked.current.style.fill = "#FFFFFF"
+        }
+        
+        el.style.fill = "#F53"
+        lastClicked.current = el
+    
+   
+        setSelectedProvince(provinceName)
+        setHighlightedProvince(provinceName)
+      }
 
     // ✅ ซูม + ใส่สีเมื่อค้นหา
     useEffect(() => {
-        if (!searchedProvince || geos.length === 0) return;
+        if (!searchedProvince || geographiesRef.current.length === 0) return
 
-        const found = geos.find(
-            (geo) =>
-                geo.properties.NAME_1.toLowerCase() === searchedProvince.toLowerCase() ||
-                geo.properties.NAME_1.toLowerCase().includes(searchedProvince.toLowerCase())
-        );
+        const query = searchedProvince.toLowerCase()
+        const found = geographiesRef.current.find((geo) => {
+            const name = geo.properties.NAME_1.toLowerCase()
+            return name === query || name.includes(query)
+        })
 
         if (found) {
             // const [minX, minY, maxX, maxY] = found.bbox || [100, 10, 101, 11];
@@ -49,7 +58,7 @@ const Map: React.FC<MapProps> = ({ searchedProvince }) => {
         } else {
             console.warn("❌ ไม่พบจังหวัด:", searchedProvince);
         }
-    }, [searchedProvince, geos]);
+    }, [searchedProvince]);
 
     return (
         <div style={{ width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#f0f8ff" }}>
@@ -62,7 +71,9 @@ const Map: React.FC<MapProps> = ({ searchedProvince }) => {
                 <ZoomableGroup center={position.coordinates} zoom={position.zoom} onMoveEnd={handleMoveEnd}>
                     <Geographies geography={THAILAND_TOPO_JSON}>
                         {({ geographies }) => {
-                            if (geos.length === 0) setGeos(geographies);
+                            if (geographiesRef.current.length === 0) {
+                                geographiesRef.current = geographies
+                              };
                             return geographies.map((geo) => {
                                 const provinceName = geo.properties.NAME_1;
                                 const isHighlighted = provinceName === highlightedProvince;
@@ -71,15 +82,12 @@ const Map: React.FC<MapProps> = ({ searchedProvince }) => {
                                     <Geography
                                         key={geo.rsmKey}
                                         geography={geo}
-                                        onClick={(e) => {
-                                            handleProvinceClick(provinceName);
-                                            const el = e.currentTarget;
-                                            if (lastClicked.current) {
-                                                lastClicked.current.style.fill = "#FFFFFF";
-                                            }
-                                            el.style.fill = "#F53";
-                                            lastClicked.current = el;
-                                        }}
+                                        onClick={(e) =>
+                                            handleProvinceClick(
+                                              provinceName,
+                                              e.currentTarget as SVGElement
+                                            )
+                                          }
                                         style={{
                                             default: {
                                                 fill: isHighlighted ? "#FFD700" : "#FFFFFF", // ✅ ใส่สีเหลืองทอง
