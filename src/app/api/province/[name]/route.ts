@@ -6,14 +6,12 @@ import Province from '@/lib/models/Province';
 // บังคับให้ API นี้ dynamic จริงๆ (ไม่ cached)
 export const dynamic = 'force-dynamic';
 
-type ParamsType = { params: { name: string } }
-
 export async function GET(
   request: NextRequest,
-  { params }: ParamsType
+  context: { params: { name: string } }
 ) {
   // 1. ดึงชื่อจังหวัด (lowercase ให้ตรงกับที่เก็บใน DB)
-  const nameParam = params.name.toLowerCase();
+  const nameParam = context.params.name.toLowerCase();
 
   // 2. ต่อฐานข้อมูล
   await connectDB();
