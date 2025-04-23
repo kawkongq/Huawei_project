@@ -1,7 +1,6 @@
 // lib/models/province.ts
 import mongoose, { Schema, model, models } from 'mongoose';
 
-
 interface Spot {
   name: string;
   address: string;

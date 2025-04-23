@@ -1,7 +1,7 @@
 // /src/app/api/provinces.js
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import Province from '@/lib/models/province';
+import Province from "@/lib/models/Province";
 
 export async function GET() {
  

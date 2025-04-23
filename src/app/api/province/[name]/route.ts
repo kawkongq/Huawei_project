@@ -1,7 +1,7 @@
 // src/app/api/province/[name]/route.ts
 import { NextResponse } from 'next/server';
-import Province from '@/lib/models/Province'
 import connectDB from '@/lib/mongodb';
+import Province from '@/lib/models/Province';
 
 // บังคับให้ API นี้ dynamic จริงๆ (ไม่ cached)
 export const dynamic = 'force-dynamic';
