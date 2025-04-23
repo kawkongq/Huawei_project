@@ -1,5 +1,5 @@
 // src/app/api/province/[name]/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Province from '@/lib/models/Province';
 
@@ -7,7 +7,7 @@ import Province from '@/lib/models/Province';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { name: string } }
 ) {
   // 1. ดึงชื่อจังหวัด (lowercase ให้ตรงกับที่เก็บใน DB)

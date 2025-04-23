@@ -2,9 +2,9 @@
 import connectDB from "@/lib/mongodb";
 import Province from "@/lib/models/Province";
 import mongoose from "mongoose";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     // เช็คว่ายังไม่ได้เชื่อมแล้วค่อย connect
     if (mongoose.connection.readyState < 1) {
